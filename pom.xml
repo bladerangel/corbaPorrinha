@@ -16,11 +16,6 @@
 
     <build>
         <finalName>corbaPorrinha</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/java/modulos/main/visoes</directory>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -23,11 +23,23 @@ public class ComunicacaoServico {
 
     public ComunicacaoServico() {
 
-
+        iniciandoORB();
+        try {
+            localizandoNome("Jogador2", "");
+            obtendoRootPOA();
+            ativandoPOA();
+            obtendoServidorNomes();
+            System.out.println("Cliente");
+        } catch (Exception  e) {
+            e.printStackTrace();
+            executandoORB();
+            System.out.println("Servidor");
+        }
     }
 
     public void iniciandoORB() {
-        orb = ORB.init();
+        String args[] = {};
+        orb = ORB.init(args, null);
     }
 
     public void obtendoRootPOA() throws InvalidName {
@@ -53,6 +65,7 @@ public class ComunicacaoServico {
 
     public void ativandoPOA() throws AdapterInactive {
         rootPOA.the_POAManager().activate();
+
     }
 
     public void executandoORB() {

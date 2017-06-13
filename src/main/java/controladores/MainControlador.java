@@ -12,7 +12,7 @@ public class MainControlador implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        mainServico = new MainServico();
     }
 
     //o jogador clica no para sair do jogo

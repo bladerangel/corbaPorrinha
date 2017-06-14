@@ -1,6 +1,5 @@
 package servicos;
 
-import compilacaoIDL.PartidaHelper;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CORBA.Object;

@@ -2,7 +2,8 @@ module compilacaoIDL{
 
 	struct Jogador {
 		string nome;
-		long quantidadePalitos;
+		long totalPalitos;
+		long quantidadePalitosApostados;
 	};
 
 	typedef sequence<Jogador> ListaJogadores;
@@ -19,7 +20,7 @@ module compilacaoIDL{
 	};
 
 	interface AcoesJogador {
-	    void enviarMensagem(in Jogador jogador, in string texto);
+	    void enviarMensagem(in string mensagem);
 	    void esolherQuantidadePalitos(in Jogador jogador, in long quantidadePalitos);
 	    void apostar(in Jogador jogador, in long quantidadePalitos);
 	    void entrarPartida(in Jogador jogador);

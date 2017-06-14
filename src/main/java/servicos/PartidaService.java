@@ -4,95 +4,65 @@ import compilacaoIDL.*;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import org.omg.CORBA.Object;
-import org.omg.CosNaming.NamingContextPackage.CannotProceed;
-import org.omg.CosNaming.NamingContextPackage.InvalidName;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
-import org.omg.PortableServer.POAPackage.ServantNotActive;
-import org.omg.PortableServer.POAPackage.WrongPolicy;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class PartidaService extends PartidaPOA {
+public class PartidaService extends AcoesJogadorPOA {
+
+    private ComunicacaoServico comunicacaoServico;
+
+    private Jogador jogador;
+
+    private Servidor servidor;
 
     private TextArea chat;
 
-    private TextField texto;
-
-    private ComunicacaoServico comunicacaoServico;
-    private Jogador jogador;
-    private List<Jogador> jogadores;
-
-
-    public Jogador getJogador() {
-        return jogador;
-    }
-
-    public PartidaService(TextArea chat, TextField texto, ComunicacaoServico comunicacaoServico) {
+    public PartidaService(TextArea chat) {
         this.chat = chat;
-        this.texto = texto;
-        this.comunicacaoServico = comunicacaoServico;
-        jogador = new Jogador("Jogador1", 3);
-        jogadores = new ArrayList<>();
+        jogador = new Jogador("Jogador1", 3, 0);
         try {
+            comunicacaoServico = new ComunicacaoServico();
+            comunicacaoServico.obtendoRootPOA();
+            comunicacaoServico.ativandoPOA();
+            comunicacaoServico.obtendoServidorNomes();
             comunicacaoServico.criandoNome(this, jogador.nome, "text");
-            entrar(jogador);
-        } catch (ServantNotActive | WrongPolicy | CannotProceed | InvalidName | NotFound servantNotActive) {
-            servantNotActive.printStackTrace();
+            Object objeto = comunicacaoServico.localizandoNome("Servidor", "text");
+            servidor = ServidorHelper.narrow(objeto);
+            entrarPartida(jogador);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    @Override
+    public void enviarMensagem(String mensagem) {
+        chat.appendText(mensagem);
+    }
+
+    public void enviarRequisicaoServidor(String mensagem) {
+        try {
+            servidor.atualizarChat(jogador, mensagem);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void esolherQuantidadePalitos(Jogador jogador, int quantidadePalitos) {
 
     }
 
     @Override
-    public Jogador[] getJogadores() {
-        return new Jogador[0];
-    }
-
-    @Override
-    public boolean verificarNomeJogador(String nome) {
-        return false;
-    }
-
-    @Override
-    public void escreverChat(Jogador jogador, String mensagem) {
-        System.out.println("entrou aki");
-        jogadores.forEach(it -> {
-            try {
-                if (!it.equals(jogador)) {
-                    Object objetoLocalizado = comunicacaoServico.localizandoNome(it.nome, "text");
-                    chat.appendText(texto.getText());
-                }
-
-            } catch (CannotProceed | InvalidName | NotFound cannotProceed) {
-                cannotProceed.printStackTrace();
-            }
-        });
-    }
-
-
-    @Override
-    public void passarTurno(Jogador jogador) {
+    public void apostar(Jogador jogador, int quantidadePalitos) {
 
     }
 
     @Override
-    public void vencedor(Jogador jogador) {
-
+    public void entrarPartida(Jogador jogador) {
+        servidor.adicionarJogador(jogador);
     }
 
     @Override
-    public void perdedor(Jogador jogador) {
+    public void sairPartida(Jogador jogador) {
 
-    }
-
-    @Override
-    public void entrar(Jogador jogador) {
-        System.out.println(jogadores.size());
-        jogadores.add(jogador);
-    }
-
-    @Override
-    public void sair(Jogador jogador) {
-        jogadores.remove(jogador);
     }
 }

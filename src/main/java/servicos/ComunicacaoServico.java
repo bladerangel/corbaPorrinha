@@ -1,5 +1,6 @@
 package servicos;
 
+import compilacaoIDL.PartidaHelper;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CORBA.Object;
@@ -24,17 +25,6 @@ public class ComunicacaoServico {
     public ComunicacaoServico() {
 
         iniciandoORB();
-        try {
-            localizandoNome("Jogador2", "");
-            obtendoRootPOA();
-            ativandoPOA();
-            obtendoServidorNomes();
-            System.out.println("Cliente");
-        } catch (Exception  e) {
-            e.printStackTrace();
-            executandoORB();
-            System.out.println("Servidor");
-        }
     }
 
     public void iniciandoORB() {

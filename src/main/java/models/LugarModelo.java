@@ -42,4 +42,16 @@ public class LugarModelo extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setRotate(rotacao);
     }
+
+    public Button getCadeira() {
+        return cadeira;
+    }
+
+    public Button getMao() {
+        return mao;
+    }
+
+    public Button getAdicionarPalito() {
+        return adicionarPalito;
+    }
 }

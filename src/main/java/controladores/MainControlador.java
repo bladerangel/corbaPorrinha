@@ -2,13 +2,10 @@ package controladores;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import models.LugarModelo;
-import servicos.LugaresService;
 import servicos.PartidaService;
 
 import java.net.URL;
@@ -29,15 +26,11 @@ public class MainControlador implements Initializable {
 
     private List<LugarModelo> listaLugares;
 
-    private LugaresService lugaresService;
-
     private PartidaService partidaService;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
 
         listaLugares = new ArrayList<>();
 
@@ -50,9 +43,9 @@ public class MainControlador implements Initializable {
         lugares.add(listaLugares.get(2), 1, 0);
         lugares.add(listaLugares.get(3), 2, 1);
 
-        lugaresService = new LugaresService(listaLugares);
 
-        // partidaService = new PartidaService(chat);
+        partidaService = new PartidaService(chat, listaLugares);
+
     }
 
     @FXML
@@ -62,6 +55,6 @@ public class MainControlador implements Initializable {
 
     //o jogador clica no para sair do jogo
     public void sairPartida() {
-        //mainServico.getTabuleiroEnviarPacoteServico().enviarPacoteSairPartida();
+        partidaService.sairPartida();
     }
 }

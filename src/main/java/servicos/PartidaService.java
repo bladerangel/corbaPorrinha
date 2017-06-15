@@ -1,14 +1,19 @@
 package servicos;
 
 import compilacaoIDL.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import models.LugarModelo;
 import org.omg.CORBA.Object;
 
+import java.util.List;
 
-public class PartidaService extends AcoesJogadorPOA {
+
+public class PartidaService extends EventosPOA {
 
     private ComunicacaoServico comunicacaoServico;
+
 
     private Jogador jogador;
 
@@ -16,9 +21,17 @@ public class PartidaService extends AcoesJogadorPOA {
 
     private TextArea chat;
 
-    public PartidaService(TextArea chat) {
+    private List<LugarModelo> listaLugares;
+
+    public PartidaService(TextArea chat, List<LugarModelo> listaLugares) {
+        this.listaLugares = listaLugares;
+        listaLugares.forEach(lugar -> {
+            lugar.getCadeira().setOnMouseClicked(event -> {
+                sentar(lugar, (Button) event.getSource());
+            });
+        });
         this.chat = chat;
-        jogador = new Jogador("Jogador1", 3, 0);
+        jogador = new Jogador("Jogador6", 0, 3, 0);
         try {
             comunicacaoServico = new ComunicacaoServico();
             comunicacaoServico.obtendoRootPOA();
@@ -32,6 +45,25 @@ public class PartidaService extends AcoesJogadorPOA {
             e.printStackTrace();
         }
     }
+
+    public void sentar(LugarModelo lugar, Button cadeira) {
+        if (jogador.lugar == 0) {
+            if (servidor.verificarLugar(jogador, lugar.getNumeroLugar())) {
+                jogador.lugar = lugar.getNumeroLugar();
+                lugar.getAdicionarPalito().setVisible(true);
+            }
+        }
+        System.out.println(jogador.lugar);
+    }
+
+    @Override
+    public void sentar(int lugar) {
+        LugarModelo lugarModelo = listaLugares.stream().filter(l -> l.getNumeroLugar() == lugar).findFirst().get();
+        lugarModelo.getCadeira().setVisible(false);
+        lugarModelo.getMao().setVisible(true);
+
+    }
+
 
     @Override
     public void enviarMensagem(String mensagem) {
@@ -61,8 +93,14 @@ public class PartidaService extends AcoesJogadorPOA {
         servidor.adicionarJogador(jogador);
     }
 
-    @Override
-    public void sairPartida(Jogador jogador) {
+    public void sairPartida() {
+        servidor.removerJogador(jogador);
+    }
 
+    @Override
+    public void sair(int lugar) {
+        LugarModelo lugarModelo = listaLugares.stream().filter(l -> l.getNumeroLugar() == lugar).findFirst().get();
+        lugarModelo.getCadeira().setVisible(true);
+        lugarModelo.getMao().setVisible(false);
     }
 }

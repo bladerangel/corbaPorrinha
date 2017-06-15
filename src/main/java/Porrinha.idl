@@ -2,6 +2,7 @@ module compilacaoIDL{
 
 	struct Jogador {
 		string nome;
+		long lugar;
 		long totalPalitos;
 		long quantidadePalitosApostados;
 	};
@@ -11,6 +12,7 @@ module compilacaoIDL{
 	interface Servidor {
 	    ListaJogadores getJogadores();
 	    boolean verificarNomeJogador(in string nome);
+	    boolean verificarLugar(in Jogador jogador, in long lugar);
 		void atualizarChat(in Jogador jogador, in string mensagem);
 		void passarTurno(in Jogador jogador);
         void vencedor(in Jogador jogador);
@@ -19,12 +21,13 @@ module compilacaoIDL{
         void removerJogador(in Jogador jogador);
 	};
 
-	interface AcoesJogador {
+	interface Eventos {
+	    void sentar(in long lugar);
 	    void enviarMensagem(in string mensagem);
 	    void esolherQuantidadePalitos(in Jogador jogador, in long quantidadePalitos);
 	    void apostar(in Jogador jogador, in long quantidadePalitos);
 	    void entrarPartida(in Jogador jogador);
-        void sairPartida(in Jogador jogador);
+        void sair(in long lugar);
    };
 
 };

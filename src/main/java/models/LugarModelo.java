@@ -54,4 +54,8 @@ public class LugarModelo extends VBox {
     public Button getAdicionarPalito() {
         return adicionarPalito;
     }
+
+    public int getNumeroLugar() {
+        return numeroLugar;
+    }
 }

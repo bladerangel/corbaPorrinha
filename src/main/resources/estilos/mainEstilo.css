@@ -1,0 +1,7 @@
+.mao-aberta{
+    -fx-image: url("../imagens/maoaberta.png");
+}
+
+.mao-fechada {
+    -fx-image: url("../imagens/maofechada.png");
+}

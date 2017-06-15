@@ -1,7 +1,12 @@
-.mao-aberta{
+.cadeira {
+    -fx-image: url("../imagens/cadeira.png");
+
+}
+
+.mao-aberta {
     -fx-image: url("../imagens/maoaberta.png");
 }
 
 .mao-fechada {
-    -fx-image: url("../imagens/maofechada.png");
+    --fx-background-image: url("../imagens/maofechada.png");
 }

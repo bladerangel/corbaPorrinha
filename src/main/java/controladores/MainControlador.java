@@ -6,7 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import models.LugarModelo;
-import servicos.PartidaService;
+import servicos.SalaService;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class MainControlador implements Initializable {
 
     private List<LugarModelo> listaLugares;
 
-    private PartidaService partidaService;
+    private SalaService salaService;
 
 
     @Override
@@ -44,17 +44,17 @@ public class MainControlador implements Initializable {
         lugares.add(listaLugares.get(3), 2, 1);
 
 
-        partidaService = new PartidaService(chat, listaLugares);
+        salaService = new SalaService(chat, listaLugares);
 
     }
 
     @FXML
     void enviarMensagem() {
-        partidaService.enviarRequisicaoServidor(texto.getText());
+        salaService.enviarRequisicaoAtualizarChat(texto.getText());
     }
 
     //o jogador clica no para sair do jogo
     public void sairPartida() {
-        partidaService.sairPartida();
+        salaService.enviarRequisicaoSairSala();
     }
 }

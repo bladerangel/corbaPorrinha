@@ -1,106 +1,114 @@
-
-import compilacaoIDL.Eventos;
-import compilacaoIDL.EventosHelper;
-import compilacaoIDL.Jogador;
-import compilacaoIDL.ServidorPOA;
+import compilacaoIDL.*;
 import org.omg.CORBA.Object;
 import servicos.ComunicacaoServico;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Servidor extends ServidorPOA {
 
 
-    private List<Jogador> jogadores;
+    private Map<Jogador, Eventos> jogadores;
     private ComunicacaoServico comunicacaoServico;
 
     public Servidor() {
-        jogadores = new ArrayList<>();
+        jogadores = new HashMap<>();
         comunicacaoServico = new ComunicacaoServico();
     }
 
     @Override
-    public boolean verificarNomeJogador(String nome) {
-        return !jogadores.stream().anyMatch(j -> j.nome.equals(nome));
+    public Jogador getJogador(String nome) {
+        return jogadores.keySet().stream().filter(jogador -> jogador.nome.equals(nome)).findFirst().get();
     }
 
     @Override
-    public boolean verificarLugar(Jogador jogador, int lugar) {
-        System.out.println(lugar);
-        if (jogadores.stream().anyMatch(j -> j.lugar == lugar)) {
-            System.out.println("cadeira ocupada");
-            return false;
-        }
-        System.out.println("cadeira livre");
-        jogadores.stream().filter(j -> j.nome.equals(jogador.nome)).findFirst().get().lugar = lugar;
-        //jogadores.forEach(j -> System.out.println("lugar"+j.lugar));
+    public boolean verificarNomeJogador(String nome) {
+        return !jogadores.keySet().stream().anyMatch(jogador -> jogador.nome.equals(nome));
+    }
 
-        jogadores.forEach(it -> {
+    @Override
+    public void adicionarJogador(String nome) {
+        try {
+            Object objeto = comunicacaoServico.localizandoNome(nome, "text");
+            Eventos evento = EventosHelper.narrow(objeto);
+            jogadores.put(new Jogador(nome, 0, 3, 0), evento);
+            System.out.println("jogador entrou partida" + jogadores.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void atualizarChat(String nome, String mensagem) {
+        jogadores.values().forEach(evento -> {
             try {
-                Object objeto = comunicacaoServico.localizandoNome(it.nome, "text");
-                Eventos acoesJogador = EventosHelper.narrow(objeto);
-                acoesJogador.sentar(lugar);
+                evento.enviarMensagem(mensagem);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+    }
 
-        return true;
+    @Override
+    public boolean verificarLugar(String nome, int lugar) {
+        Jogador jogador = getJogador(nome);
+        if (jogador.lugar == 0) {
+            if (jogadores.keySet().stream().anyMatch(j -> j.lugar == lugar)) {
+                System.out.println("cadeira ocupada");
+                return false;
+            }
+            System.out.println("cadeira livre");
+
+            jogadores.keySet().stream().filter(j -> j.nome.equals(nome)).findFirst().get().lugar = lugar;
+
+            jogadores.keySet().forEach(j -> System.out.println("lugar" + j.lugar));
+
+            jogadores.values().forEach(evento -> {
+                try {
+                    evento.sentar(lugar);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            return true;
+        }
+        return false;
     }
 
     @Override
     public Jogador[] getJogadores() {
-        return (Jogador[]) jogadores.toArray();
+        return (Jogador[]) jogadores.entrySet().toArray();
     }
 
     @Override
-    public void atualizarChat(Jogador jogador, String mensagem) {
-        jogadores.forEach(it -> {
-            try {
-                Object objeto = comunicacaoServico.localizandoNome(it.nome, "text");
-                System.out.println(it.nome);
-                Eventos acoesJogador = EventosHelper.narrow(objeto);
-                acoesJogador.enviarMensagem(mensagem);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    @Override
-    public void passarTurno(Jogador jogador) {
+    public void passarTurno(String nome) {
 
     }
 
     @Override
-    public void vencedor(Jogador jogador) {
+    public void vencedor(String nome) {
 
     }
 
     @Override
-    public void perdedor(Jogador jogador) {
+    public void perdedor(String nome) {
 
     }
 
     @Override
-    public void adicionarJogador(Jogador jogador) {
-        jogadores.add(jogador);
-        System.out.println("jogador entrou partida" + jogadores.size());
-    }
-
-    @Override
-    public void removerJogador(Jogador jogador) {
-        jogadores.removeIf(j -> jogador.nome.equals(j.nome));
-        jogadores.forEach(it -> {
-            try {
-                Object objeto = comunicacaoServico.localizandoNome(it.nome, "text");
-                Eventos acoesJogador = EventosHelper.narrow(objeto);
-                acoesJogador.sair(jogador.lugar);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    public void removerJogador(String nome) {
+        Jogador jogador = getJogador(nome);
+        jogadores.keySet().remove(jogador);
+        if (jogador.lugar != 0) {
+            jogadores.values().forEach(evento -> {
+                try {
+                    evento.sairSala(jogador.lugar);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     public ComunicacaoServico getComunicacaoServico() {

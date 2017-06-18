@@ -9,25 +9,28 @@ module compilacaoIDL{
 
 	typedef sequence<Jogador> ListaJogadores;
 
-	interface Servidor {
-	    ListaJogadores getJogadores();
-	    boolean verificarNomeJogador(in string nome);
-	    boolean verificarLugar(in Jogador jogador, in long lugar);
-		void atualizarChat(in Jogador jogador, in string mensagem);
-		void passarTurno(in Jogador jogador);
-        void vencedor(in Jogador jogador);
-        void perdedor(in Jogador jogador);
-		void adicionarJogador(in Jogador jogador);
-        void removerJogador(in Jogador jogador);
-	};
-
-	interface Eventos {
+    interface Eventos {
 	    void sentar(in long lugar);
 	    void enviarMensagem(in string mensagem);
-	    void esolherQuantidadePalitos(in Jogador jogador, in long quantidadePalitos);
-	    void apostar(in Jogador jogador, in long quantidadePalitos);
-	    void entrarPartida(in Jogador jogador);
-        void sair(in long lugar);
-   };
+	    void esolherQuantidadePalitos(in long quantidadePalitos);
+	    void apostar(in long quantidadePalitos);
+	    void entrarSala();
+        void sairSala(in long lugar);
+    };
+
+	interface Servidor {
+	    ListaJogadores getJogadores();
+	    Jogador getJogador(in string nome);
+	    boolean verificarNomeJogador(in string nome);
+	    boolean verificarLugar(in string nome, in long lugar);
+		void atualizarChat(in string nome, in string mensagem);
+		void passarTurno(in string nome);
+        void vencedor(in string nome);
+        void perdedor(in string nome);
+		void adicionarJogador(in string nome);
+        void removerJogador(in string nome);
+	};
+
+
 
 };

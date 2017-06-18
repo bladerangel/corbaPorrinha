@@ -6,6 +6,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import models.LugarModelo;
 import org.omg.CORBA.Object;
+import utilitarios.JanelaAlerta;
+import utilitarios.NomeDialogo;
 
 import java.util.List;
 
@@ -25,22 +27,41 @@ public class PartidaService extends EventosPOA {
 
     public PartidaService(TextArea chat, List<LugarModelo> listaLugares) {
         this.listaLugares = listaLugares;
-        listaLugares.forEach(lugar -> {
-            lugar.getCadeira().setOnMouseClicked(event -> {
-                sentar(lugar, (Button) event.getSource());
-            });
-        });
+        carregarEventosLugares();
         this.chat = chat;
-        jogador = new Jogador("Jogador6", 0, 3, 0);
+
         try {
             comunicacaoServico = new ComunicacaoServico();
             comunicacaoServico.obtendoRootPOA();
             comunicacaoServico.ativandoPOA();
             comunicacaoServico.obtendoServidorNomes();
-            comunicacaoServico.criandoNome(this, jogador.nome, "text");
             Object objeto = comunicacaoServico.localizandoNome("Servidor", "text");
             servidor = ServidorHelper.narrow(objeto);
+            perguntarNome();
             entrarPartida(jogador);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void carregarEventosLugares() {
+        listaLugares.forEach(lugar -> {
+            lugar.getCadeira().setOnMouseClicked(event -> {
+                sentar(lugar, (Button) event.getSource());
+            });
+        });
+    }
+
+    public void perguntarNome() {
+        try {
+            String nome = NomeDialogo.nomeDialogo(null, "Informe o nome do jogador", "Digite o nome do jogador:");
+            if (servidor.verificarNomeJogador(nome)) {
+                jogador = new Jogador(nome, 0, 3, 0);
+                comunicacaoServico.criandoNome(this, nome, "text");
+            } else {
+                JanelaAlerta.janelaAlerta(null, "Este nome já existe!", null);
+                perguntarNome();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

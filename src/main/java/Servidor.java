@@ -21,6 +21,11 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
+    public boolean verificarNomeJogador(String nome) {
+        return !jogadores.stream().anyMatch(j -> j.nome.equals(nome));
+    }
+
+    @Override
     public boolean verificarLugar(Jogador jogador, int lugar) {
         System.out.println(lugar);
         if (jogadores.stream().anyMatch(j -> j.lugar == lugar)) {
@@ -47,11 +52,6 @@ public class Servidor extends ServidorPOA {
     @Override
     public Jogador[] getJogadores() {
         return (Jogador[]) jogadores.toArray();
-    }
-
-    @Override
-    public boolean verificarNomeJogador(String nome) {
-        return false;
     }
 
     @Override

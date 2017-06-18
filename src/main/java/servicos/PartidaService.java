@@ -55,11 +55,11 @@ public class PartidaService extends EventosPOA {
     public void perguntarNome() {
         try {
             String nome = NomeDialogo.nomeDialogo(null, "Informe o nome do jogador", "Digite o nome do jogador:");
-            if (servidor.verificarNomeJogador(nome)) {
+            if (servidor.verificarNomeJogador(nome) && !nome.equals("")) {
                 jogador = new Jogador(nome, 0, 3, 0);
                 comunicacaoServico.criandoNome(this, nome, "text");
             } else {
-                JanelaAlerta.janelaAlerta(null, "Este nome já existe!", null);
+                JanelaAlerta.janelaAlerta(null, "Este nome já existe/inválido!", null);
                 perguntarNome();
             }
         } catch (Exception e) {

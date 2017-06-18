@@ -77,6 +77,16 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
+    public void atualizarLugares() {
+        jogadores.values().forEach(evento -> {
+            jogadores.keySet().forEach(jogador -> {
+                if (jogador.lugar != 0)
+                    evento.sentar(jogador.lugar);
+            });
+        });
+    }
+
+    @Override
     public Jogador[] getJogadores() {
         return (Jogador[]) jogadores.entrySet().toArray();
     }

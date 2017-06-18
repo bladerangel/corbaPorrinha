@@ -23,6 +23,7 @@ module compilacaoIDL{
 	    Jogador getJogador(in string nome);
 	    boolean verificarNomeJogador(in string nome);
 	    boolean verificarLugar(in string nome, in long lugar);
+	    void atualizarLugares();
 		void atualizarChat(in string nome, in string mensagem);
 		void passarTurno(in string nome);
         void vencedor(in string nome);

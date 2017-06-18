@@ -54,6 +54,7 @@ public class SalaService extends EventosPOA {
                 nomeJogador = nome;
                 comunicacaoServico.criandoNome(this, nome, "text");
                 servidor.adicionarJogador(nome);
+                servidor.atualizarLugares();
             } else {
                 JanelaAlerta.janelaAlerta(null, "Este nome já existe/inválido!", null);
                 enviarRequisicaoPerguntarNome();

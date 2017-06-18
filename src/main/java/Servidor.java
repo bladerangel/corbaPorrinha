@@ -23,7 +23,7 @@ public class Servidor extends ServidorPOA {
 
     @Override
     public boolean verificarNomeJogador(String nome) {
-        return !jogadores.keySet().stream().anyMatch(jogador -> jogador.nome.equals(nome));
+        return !jogadores.keySet().stream().anyMatch(jogador -> jogador.nome.equals(nome)) && !nome.equals("");
     }
 
     @Override

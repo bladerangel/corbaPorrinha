@@ -49,6 +49,7 @@ public class SalaService extends EventosPOA {
             lugar.getMao().setOnMouseClicked(event -> enviarRequisicaoApostar());
             lugar.getAdicionar().setOnMouseClicked(event -> enviarRequisicaoAdicionar());
             lugar.getRemover().setOnMouseClicked(event -> enviarRequisicaoRemover());
+            lugar.getPalpite().setOnMouseClicked(event -> enviarRequisicaoPalpite());
         });
     }
 
@@ -115,8 +116,13 @@ public class SalaService extends EventosPOA {
     public void enviarRequisicaoApostar() {
         Jogador jogador = servidor.getJogador(nomeJogador);
         if (servidor.apostar(nomeJogador)) {
-            listaLugares.get(jogador.lugar - 1).getAcoes().setVisible(false);
+            //listaLugares.get(jogador.lugar - 1).getAcoes().setVisible(false);
         }
+    }
+
+    public void enviarRequisicaoPalpite() {
+        String palpite = NomeDialogo.nomeDialogo(null, "Informe o seu palpite", "Digite o seu palpite:");
+        servidor.palpitar(nomeJogador, Integer.parseInt(palpite));
     }
 
     @Override

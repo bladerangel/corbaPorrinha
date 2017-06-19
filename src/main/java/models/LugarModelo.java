@@ -14,12 +14,12 @@ public class LugarModelo extends VBox {
     private Button mao;
     private Button adicionar;
     private Button remover;
-    private Button turno;
+    private Button palpite;
     private ImageView imagemMao;
     private ImageView imageCadeira;
     private ImageView imagemAdicionar;
     private ImageView imagemRemover;
-    private ImageView imagemTurno;
+    private ImageView imagemPalpite;
     private Text numeroLugarMesa;
     private Text quantidadePalitosRestantes;
 
@@ -55,12 +55,12 @@ public class LugarModelo extends VBox {
 
         acoes.getChildren().add(remover);
 
-        turno = new Button();
-        imagemTurno = new ImageView();
-        imagemTurno.getStyleClass().add("turno");
-        turno.setGraphic(imagemTurno);
+        palpite = new Button();
+        imagemPalpite = new ImageView();
+        imagemPalpite.getStyleClass().add("palpite");
+        palpite.setGraphic(imagemPalpite);
 
-        acoes.getChildren().add(turno);
+        acoes.getChildren().add(palpite);
         acoes.setVisible(false);
         acoes.setAlignment(Pos.CENTER);
 
@@ -95,8 +95,8 @@ public class LugarModelo extends VBox {
         return remover;
     }
 
-    public Button getTurno() {
-        return turno;
+    public Button getPalpite() {
+        return palpite;
     }
 
     public HBox getAcoes() {

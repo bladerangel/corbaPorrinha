@@ -18,6 +18,6 @@
     -fx-image: url("../imagens/remover.png");
 }
 
-.turno {
-    -fx-image: url("../imagens/turno.png");
+.palpite {
+    -fx-image: url("../imagens/palpite.png");
 }

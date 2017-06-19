@@ -141,8 +141,12 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
-    public void palpitar(int quantidadePalitosTotal) {
-        int tentativas = 1;
+    public void palpitar(String nome, int quantidadePalitosTotal) {
+        Jogador jogador = getJogador(nome);
+        if (jogador.apostou) {
+            jogador.palpite = quantidadePalitosTotal;
+        }
+       /* int tentativas = 1;
         int lugarInicial = jogadorTurno.lugar;
 
         lugarInicial++;
@@ -159,6 +163,7 @@ public class Servidor extends ServidorPOA {
             }
             tentativas++;
         }
+        */
     }
 
     public boolean passarTurno(int lugarTeste) {

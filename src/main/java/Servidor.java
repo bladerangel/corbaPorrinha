@@ -51,6 +51,24 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
+    public void adicionarPalito(String nome) {
+        Jogador jogador = getJogador(nome);
+        if (jogador.quantidadePalitosRestantes > 0) {
+            jogador.quantidadePalitosApostados++;
+            jogador.quantidadePalitosRestantes--;
+        }
+    }
+
+    @Override
+    public void removerPalito(String nome) {
+        Jogador jogador = getJogador(nome);
+        if (jogador.quantidadePalitosApostados > 0) {
+            jogador.quantidadePalitosApostados--;
+            jogador.quantidadePalitosRestantes++;
+        }
+    }
+
+    @Override
     public boolean verificarLugar(String nome, int lugar) {
         Jogador jogador = getJogador(nome);
         if (jogador.lugar == 0) {

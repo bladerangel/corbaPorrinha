@@ -3,7 +3,7 @@ module compilacaoIDL{
 	struct Jogador {
 		string nome;
 		long lugar;
-		long totalPalitos;
+		long quantidadePalitosRestantes;
 		long quantidadePalitosApostados;
 	};
 
@@ -25,6 +25,8 @@ module compilacaoIDL{
 	    boolean verificarLugar(in string nome, in long lugar);
 	    void atualizarLugares();
 		void atualizarChat(in string nome, in string mensagem);
+		void adicionarPalito(in string nome);
+		void removerPalito(in string nome);
 		void passarTurno(in string nome);
         void vencedor(in string nome);
         void perdedor(in string nome);

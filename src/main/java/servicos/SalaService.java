@@ -44,7 +44,10 @@ public class SalaService extends EventosPOA {
     }
 
     public void carregarEventosLugares() {
-        listaLugares.forEach(lugar -> lugar.getCadeira().setOnMouseClicked(event -> enviarRequisicaoSentar(lugar)));
+        listaLugares.forEach(lugar -> {
+            lugar.getCadeira().setOnMouseClicked(event -> enviarRequisicaoSentar(lugar));
+            lugar.getAdicionar().setOnMouseClicked(event -> enviarRequisicaoAdicionar());
+        });
     }
 
     public void enviarRequisicaoPerguntarNome() {
@@ -67,6 +70,8 @@ public class SalaService extends EventosPOA {
     public void enviarRequisicaoSentar(LugarModelo lugar) {
         if (servidor.verificarLugar(nomeJogador, lugar.getNumeroLugar())) {
             lugar.getAcoes().setVisible(true);
+            lugar.getQuantidadePalitosRestantes().setVisible(true);
+            lugar.getQuantidadePalitosRestantes().setText("Palitos Restante: "+servidor.getJogador(nomeJogador).quantidadePalitosRestantes + "");
         }
     }
 
@@ -89,6 +94,10 @@ public class SalaService extends EventosPOA {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void enviarRequisicaoAdicionar() {
+
     }
 
     @Override

@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class LugarModelo extends VBox {
 
@@ -19,6 +20,9 @@ public class LugarModelo extends VBox {
     private ImageView imagemAdicionar;
     private ImageView imagemRemover;
     private ImageView imagemTurno;
+    private Text numeroLugarMesa;
+    private Text quantidadePalitosRestantes;
+
     private HBox acoes;
 
     public LugarModelo(int numeroLugar, int rotacao) {
@@ -61,9 +65,17 @@ public class LugarModelo extends VBox {
         acoes.setVisible(false);
         acoes.setAlignment(Pos.CENTER);
 
+        numeroLugarMesa = new Text();
+        numeroLugarMesa.setText("Lugar: " + numeroLugar);
+
+        quantidadePalitosRestantes = new Text();
+        quantidadePalitosRestantes.setVisible(false);
+
         this.getChildren().add(cadeira);
         this.getChildren().add(mao);
         this.getChildren().add(acoes);
+        this.getChildren().add(numeroLugarMesa);
+        this.getChildren().add(quantidadePalitosRestantes);
         this.setAlignment(Pos.CENTER);
         this.setRotate(rotacao);
     }
@@ -82,6 +94,10 @@ public class LugarModelo extends VBox {
 
     public HBox getAcoes() {
         return acoes;
+    }
+
+    public Text getQuantidadePalitosRestantes() {
+        return quantidadePalitosRestantes;
     }
 
     public int getNumeroLugar() {

@@ -112,11 +112,10 @@ public class SalaService extends EventosPOA {
         listaLugares.get(jogador.lugar - 1).getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes + "");
     }
 
-    public void enviarRequisicaoApostar(){
+    public void enviarRequisicaoApostar() {
         Jogador jogador = servidor.getJogador(nomeJogador);
-        listaLugares.get(jogador.lugar - 1).getMao().getGraphic().getStyleClass().add("mao-fechada");
         listaLugares.get(jogador.lugar - 1).getAcoes().setVisible(false);
-        servidor.apostar();
+        servidor.apostar(nomeJogador, jogador.lugar);
     }
 
     @Override
@@ -125,8 +124,8 @@ public class SalaService extends EventosPOA {
     }
 
     @Override
-    public void apostar(int quantidadePalitos) {
-
+    public void apostar(int lugar) {
+        listaLugares.get(lugar - 1).getMao().getGraphic().getStyleClass().add("mao-fechada");
     }
 
     @Override

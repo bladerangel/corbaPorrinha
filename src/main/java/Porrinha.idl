@@ -5,6 +5,8 @@ module compilacaoIDL{
 		long lugar;
 		long quantidadePalitosRestantes;
 		long quantidadePalitosApostados;
+		boolean apostou;
+		long palpite;
 	};
 
 	typedef sequence<Jogador> ListaJogadores;
@@ -13,7 +15,7 @@ module compilacaoIDL{
 	    void sentar(in long lugar);
 	    void enviarMensagem(in string mensagem);
 	    void esolherQuantidadePalitos(in long quantidadePalitos);
-	    void apostar(in long quantidadePalitos);
+	    void apostar(in long lugar);
 	    void entrarSala();
         void sairSala(in long lugar);
     };
@@ -27,7 +29,8 @@ module compilacaoIDL{
 		void atualizarChat(in string nome, in string mensagem);
 		void adicionarPalito(in string nome);
 		void removerPalito(in string nome);
-		void apostar();
+		void apostar(in string nome, in long lugar);
+		void palpitar(in long quantidadePalitosTotal);
         void vencedor(in string nome);
         void perdedor(in string nome);
 		void adicionarJogador(in string nome);

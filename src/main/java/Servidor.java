@@ -33,12 +33,8 @@ public class Servidor extends ServidorPOA {
         try {
             Object objeto = comunicacaoServico.localizandoNome(nome, "text");
             Eventos evento = EventosHelper.narrow(objeto);
-            jogadores.put(new Jogador(nome, 0, 3, 0), evento);
+            jogadores.put(new Jogador(nome, 0, 3, 0, false, 0), evento);
             System.out.println("jogador entrou partida" + jogadores.size());
-
-            if (jogadores.size() == 1) {
-                jogadorTurno = getJogador(nome);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,7 +55,7 @@ public class Servidor extends ServidorPOA {
     @Override
     public void adicionarPalito(String nome) {
         Jogador jogador = getJogador(nome);
-        if (jogador.quantidadePalitosRestantes > 0 && jogadorTurno.equals(jogador)) {
+        if (jogador.quantidadePalitosRestantes > 0 && !jogador.apostou) {
             jogador.quantidadePalitosApostados++;
             jogador.quantidadePalitosRestantes--;
         }
@@ -68,7 +64,7 @@ public class Servidor extends ServidorPOA {
     @Override
     public void removerPalito(String nome) {
         Jogador jogador = getJogador(nome);
-        if (jogador.quantidadePalitosApostados > 0 && jogadorTurno.equals(jogador)) {
+        if (jogador.quantidadePalitosApostados > 0 && !jogador.apostou) {
             jogador.quantidadePalitosApostados--;
             jogador.quantidadePalitosRestantes++;
         }
@@ -116,7 +112,26 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
-    public void apostar() {
+    public void apostar(String nome, int lugar) {
+        getJogador(nome).apostou = true;
+        jogadores.values().forEach(evento -> {
+            try {
+                evento.apostar(lugar);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        if (jogadores.keySet().stream().allMatch(jogador -> jogador.apostou)) {
+            jogadorTurno = jogadores.keySet().stream().findFirst().get();
+        }
+
+        System.out.println(jogadorTurno.nome);
+    }
+
+    @Override
+    public void palpitar(int quantidadePalitosTotal) {
         int tentativas = 1;
         int lugarInicial = jogadorTurno.lugar;
 

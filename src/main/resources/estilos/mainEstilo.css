@@ -1,6 +1,5 @@
 .cadeira {
     -fx-image: url("../imagens/cadeira.png");
-
 }
 
 .mao-aberta {
@@ -8,5 +7,17 @@
 }
 
 .mao-fechada {
-    --fx-background-image: url("../imagens/maofechada.png");
+    -fx-image: url("../imagens/maofechada.png");
+}
+
+.adicionar {
+    -fx-image: url("../imagens/adicionar.png");
+}
+
+.remover {
+    -fx-image: url("../imagens/remover.png");
+}
+
+.turno {
+    -fx-image: url("../imagens/turno.png");
 }

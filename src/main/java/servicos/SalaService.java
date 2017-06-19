@@ -66,7 +66,7 @@ public class SalaService extends EventosPOA {
 
     public void enviarRequisicaoSentar(LugarModelo lugar) {
         if (servidor.verificarLugar(nomeJogador, lugar.getNumeroLugar())) {
-            lugar.getAdicionarPalito().setVisible(true);
+            lugar.getAcoes().setVisible(true);
         }
     }
 

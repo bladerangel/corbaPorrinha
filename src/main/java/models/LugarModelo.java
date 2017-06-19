@@ -3,6 +3,7 @@ package models;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class LugarModelo extends VBox {
@@ -10,10 +11,15 @@ public class LugarModelo extends VBox {
     private int numeroLugar;
     private Button cadeira;
     private Button mao;
+    private Button adicionar;
+    private Button remover;
+    private Button turno;
     private ImageView imagemMao;
     private ImageView imageCadeira;
-    private Button adicionarPalito;
-
+    private ImageView imagemAdicionar;
+    private ImageView imagemRemover;
+    private ImageView imagemTurno;
+    private HBox acoes;
 
     public LugarModelo(int numeroLugar, int rotacao) {
 
@@ -31,14 +37,33 @@ public class LugarModelo extends VBox {
         mao.setGraphic(imagemMao);
         mao.setVisible(false);
 
+        acoes = new HBox();
+        adicionar = new Button();
+        imagemAdicionar = new ImageView();
+        imagemAdicionar.getStyleClass().add("adicionar");
+        adicionar.setGraphic(imagemAdicionar);
 
-        adicionarPalito = new Button();
-        adicionarPalito.setText("Adicionar Palito");
-        adicionarPalito.setVisible(false);
+        acoes.getChildren().add(adicionar);
+
+        remover = new Button();
+        imagemRemover = new ImageView();
+        imagemRemover.getStyleClass().add("remover");
+        remover.setGraphic(imagemRemover);
+
+        acoes.getChildren().add(remover);
+
+        turno = new Button();
+        imagemTurno = new ImageView();
+        imagemTurno.getStyleClass().add("turno");
+        turno.setGraphic(imagemTurno);
+
+        acoes.getChildren().add(turno);
+        acoes.setVisible(false);
+        acoes.setAlignment(Pos.CENTER);
 
         this.getChildren().add(cadeira);
         this.getChildren().add(mao);
-        this.getChildren().add(adicionarPalito);
+        this.getChildren().add(acoes);
         this.setAlignment(Pos.CENTER);
         this.setRotate(rotacao);
     }
@@ -51,8 +76,12 @@ public class LugarModelo extends VBox {
         return mao;
     }
 
-    public Button getAdicionarPalito() {
-        return adicionarPalito;
+    public Button getAdicionar() {
+        return adicionar;
+    }
+
+    public HBox getAcoes() {
+        return acoes;
     }
 
     public int getNumeroLugar() {

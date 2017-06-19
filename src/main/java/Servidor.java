@@ -112,22 +112,32 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
-    public void apostar(String nome, int lugar) {
-        getJogador(nome).apostou = true;
-        jogadores.values().forEach(evento -> {
-            try {
-                evento.apostar(lugar);
-            } catch (Exception e) {
-                e.printStackTrace();
+    public boolean apostar(String nome) {
+
+        Jogador jogador = getJogador(nome);
+        if (!jogador.apostou && jogador.lugar != 0) {
+
+            jogador.apostou = true;
+            jogadores.values().forEach(evento -> {
+                try {
+                    evento.apostar(jogador.lugar);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+           /* if (jogadores.keySet().stream().allMatch(jogador -> jogador.apostou)) {
+                jogadorTurno = jogadores.keySet().stream().findFirst().get();
             }
-        });
 
-
-        if (jogadores.keySet().stream().allMatch(jogador -> jogador.apostou)) {
-            jogadorTurno = jogadores.keySet().stream().findFirst().get();
+            System.out.println(jogadorTurno.nome);
+            */
+            return true;
         }
 
-        System.out.println(jogadorTurno.nome);
+        return false;
+
     }
 
     @Override

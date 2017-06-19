@@ -115,6 +115,8 @@ public class SalaService extends EventosPOA {
     public void enviarRequisicaoApostar(){
         Jogador jogador = servidor.getJogador(nomeJogador);
         listaLugares.get(jogador.lugar - 1).getMao().getGraphic().getStyleClass().add("mao-fechada");
+        //listaLugares.get(jogador.lugar - 1).getAcoes().setVisible(false);
+        servidor.apostar();
     }
 
     @Override

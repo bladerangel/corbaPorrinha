@@ -8,7 +8,9 @@ import java.util.Map;
 public class Servidor extends ServidorPOA {
 
 
+    private static final int LIMITE_JOGADORES = 4;
     private Map<Jogador, Eventos> jogadores;
+    private Jogador jogadorTurno;
     private ComunicacaoServico comunicacaoServico;
 
     public Servidor() {
@@ -33,6 +35,10 @@ public class Servidor extends ServidorPOA {
             Eventos evento = EventosHelper.narrow(objeto);
             jogadores.put(new Jogador(nome, 0, 3, 0), evento);
             System.out.println("jogador entrou partida" + jogadores.size());
+
+            if (jogadores.size() == 1) {
+                jogadorTurno = getJogador(nome);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,7 +59,7 @@ public class Servidor extends ServidorPOA {
     @Override
     public void adicionarPalito(String nome) {
         Jogador jogador = getJogador(nome);
-        if (jogador.quantidadePalitosRestantes > 0) {
+        if (jogador.quantidadePalitosRestantes > 0 && jogadorTurno.equals(jogador)) {
             jogador.quantidadePalitosApostados++;
             jogador.quantidadePalitosRestantes--;
         }
@@ -62,7 +68,7 @@ public class Servidor extends ServidorPOA {
     @Override
     public void removerPalito(String nome) {
         Jogador jogador = getJogador(nome);
-        if (jogador.quantidadePalitosApostados > 0) {
+        if (jogador.quantidadePalitosApostados > 0 && jogadorTurno.equals(jogador)) {
             jogador.quantidadePalitosApostados--;
             jogador.quantidadePalitosRestantes++;
         }
@@ -110,8 +116,25 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
-    public void passarTurno(String nome) {
+    public void apostar() {
+        int tentativas = 1;
+        int lugarInicial = jogadorTurno.lugar;
 
+        lugarInicial++;
+        while (jogadorTurno.lugar != lugarInicial && tentativas < 4) {
+            if (lugarInicial < LIMITE_JOGADORES) {
+                passarTurno(lugarInicial++);
+            } else {
+                lugarInicial = 0;
+            }
+            tentativas++;
+        }
+    }
+
+    public void passarTurno(int lugarTeste) {
+        if (jogadores.keySet().stream().anyMatch(jogador -> jogador.lugar == lugarTeste)) {
+            jogadorTurno = jogadores.keySet().stream().filter(jogador -> jogador.lugar == lugarTeste).findFirst().get();
+        }
     }
 
     @Override

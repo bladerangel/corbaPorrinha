@@ -27,7 +27,7 @@ module compilacaoIDL{
 		void atualizarChat(in string nome, in string mensagem);
 		void adicionarPalito(in string nome);
 		void removerPalito(in string nome);
-		void passarTurno(in string nome);
+		void apostar();
         void vencedor(in string nome);
         void perdedor(in string nome);
 		void adicionarJogador(in string nome);

@@ -122,19 +122,26 @@ public class Servidor extends ServidorPOA {
 
         lugarInicial++;
         while (jogadorTurno.lugar != lugarInicial && tentativas < 4) {
+            System.out.println(lugarInicial);
+            System.out.println(tentativas);
             if (lugarInicial < LIMITE_JOGADORES) {
-                passarTurno(lugarInicial++);
+                if (passarTurno(lugarInicial++)) {
+                    tentativas = 4;
+                }
             } else {
-                lugarInicial = 0;
+                lugarInicial = 1;
+                tentativas--;
             }
             tentativas++;
         }
     }
 
-    public void passarTurno(int lugarTeste) {
+    public boolean passarTurno(int lugarTeste) {
         if (jogadores.keySet().stream().anyMatch(jogador -> jogador.lugar == lugarTeste)) {
             jogadorTurno = jogadores.keySet().stream().filter(jogador -> jogador.lugar == lugarTeste).findFirst().get();
+            return true;
         }
+        return false;
     }
 
     @Override

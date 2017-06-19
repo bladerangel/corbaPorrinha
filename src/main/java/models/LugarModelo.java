@@ -37,7 +37,6 @@ public class LugarModelo extends VBox {
         mao = new Button();
         imagemMao = new ImageView();
         imagemMao.getStyleClass().add("mao-aberta");
-        mao.setText("1 palito");
         mao.setGraphic(imagemMao);
         mao.setVisible(false);
 
@@ -90,6 +89,14 @@ public class LugarModelo extends VBox {
 
     public Button getAdicionar() {
         return adicionar;
+    }
+
+    public Button getRemover() {
+        return remover;
+    }
+
+    public Button getTurno() {
+        return turno;
     }
 
     public HBox getAcoes() {

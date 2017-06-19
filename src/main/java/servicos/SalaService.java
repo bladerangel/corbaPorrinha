@@ -47,6 +47,7 @@ public class SalaService extends EventosPOA {
         listaLugares.forEach(lugar -> {
             lugar.getCadeira().setOnMouseClicked(event -> enviarRequisicaoSentar(lugar));
             lugar.getAdicionar().setOnMouseClicked(event -> enviarRequisicaoAdicionar());
+            lugar.getRemover().setOnMouseClicked(event -> enviarRequisicaoRemover());
         });
     }
 
@@ -71,7 +72,7 @@ public class SalaService extends EventosPOA {
         if (servidor.verificarLugar(nomeJogador, lugar.getNumeroLugar())) {
             lugar.getAcoes().setVisible(true);
             lugar.getQuantidadePalitosRestantes().setVisible(true);
-            lugar.getQuantidadePalitosRestantes().setText("Palitos Restante: "+servidor.getJogador(nomeJogador).quantidadePalitosRestantes + "");
+            lugar.getQuantidadePalitosRestantes().setText("Palitos Restante: " + servidor.getJogador(nomeJogador).quantidadePalitosRestantes + "");
         }
     }
 
@@ -97,7 +98,17 @@ public class SalaService extends EventosPOA {
     }
 
     public void enviarRequisicaoAdicionar() {
+        servidor.adicionarPalito(nomeJogador);
+        Jogador jogador = servidor.getJogador(nomeJogador);
+        listaLugares.get(jogador.lugar - 1).getMao().setText(jogador.quantidadePalitosApostados + " Palitos");
+        listaLugares.get(jogador.lugar - 1).getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes + "");
+    }
 
+    public void enviarRequisicaoRemover() {
+        servidor.removerPalito(nomeJogador);
+        Jogador jogador = servidor.getJogador(nomeJogador);
+        listaLugares.get(jogador.lugar - 1).getMao().setText(jogador.quantidadePalitosApostados + " Palitos");
+        listaLugares.get(jogador.lugar - 1).getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes + "");
     }
 
     @Override

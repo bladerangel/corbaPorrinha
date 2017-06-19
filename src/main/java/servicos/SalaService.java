@@ -46,6 +46,7 @@ public class SalaService extends EventosPOA {
     public void carregarEventosLugares() {
         listaLugares.forEach(lugar -> {
             lugar.getCadeira().setOnMouseClicked(event -> enviarRequisicaoSentar(lugar));
+            lugar.getMao().setOnMouseClicked(event -> enviarRequisicaoApostar());
             lugar.getAdicionar().setOnMouseClicked(event -> enviarRequisicaoAdicionar());
             lugar.getRemover().setOnMouseClicked(event -> enviarRequisicaoRemover());
         });
@@ -109,6 +110,11 @@ public class SalaService extends EventosPOA {
         Jogador jogador = servidor.getJogador(nomeJogador);
         listaLugares.get(jogador.lugar - 1).getMao().setText(jogador.quantidadePalitosApostados + " Palitos");
         listaLugares.get(jogador.lugar - 1).getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes + "");
+    }
+
+    public void enviarRequisicaoApostar(){
+        Jogador jogador = servidor.getJogador(nomeJogador);
+        listaLugares.get(jogador.lugar - 1).getMao().getGraphic().getStyleClass().add("mao-fechada");
     }
 
     @Override

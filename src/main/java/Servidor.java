@@ -5,19 +5,17 @@ import servicos.ComunicacaoServico;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Servidor extends ServidorPOA {
 
-    private Comparator<Jogador> comparadorJogador;
     private static final int LIMITE_JOGADORES = 4;
     private Map<Jogador, Eventos> jogadores;
     private Jogador jogadorTurno;
     private ComunicacaoServico comunicacaoServico;
 
     public Servidor() {
-        comparadorJogador = Comparator.comparingInt(jogador -> jogador.lugar);
-        jogadores = new TreeMap<>(comparadorJogador);
+
+        jogadores = new HashMap<>();
         comunicacaoServico = new ComunicacaoServico();
     }
 
@@ -36,7 +34,7 @@ public class Servidor extends ServidorPOA {
         try {
             Object objeto = comunicacaoServico.localizandoNome(nome, "text");
             Eventos evento = EventosHelper.narrow(objeto);
-            jogadores.put(new Jogador(nome, 0, 3, 0, false, 0), evento);
+            jogadores.put(new Jogador(nome, 0, 3, 0, false, false, 0), evento);
             System.out.println("jogador entrou partida" + jogadores.size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,7 +73,9 @@ public class Servidor extends ServidorPOA {
 
     @Override
     public boolean verificarLugar(String nome, int lugar) {
+        System.out.println("nome:" + nome);
         Jogador jogador = getJogador(nome);
+        System.out.println("passou aki");
         if (jogador.lugar == 0) {
             if (jogadores.keySet().stream().anyMatch(j -> j.lugar == lugar)) {
                 System.out.println("cadeira ocupada");
@@ -83,8 +83,9 @@ public class Servidor extends ServidorPOA {
             }
             System.out.println("cadeira livre");
 
-            jogadores.keySet().stream().filter(j -> j.nome.equals(nome)).findFirst().get().lugar = lugar;
+            jogador.lugar = lugar;
 
+            jogadores.entrySet().stream().sorted(Comparator.comparingInt(o -> o.getKey().lugar));
             jogadores.keySet().forEach(j -> System.out.println("lugar" + j.lugar));
 
             jogadores.values().forEach(evento -> {
@@ -133,12 +134,12 @@ public class Servidor extends ServidorPOA {
             if (jogadores.keySet().stream().allMatch(j -> j.apostou)) {
                 if (jogadorTurno == null) {
                     jogadorTurno = jogadores.keySet().stream().findFirst().get();
-                } else {
-                    jogadorTurno = jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().get();
+                    //} else {
+                    //  jogadorTurno = jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().get();
                 }
             }
 
-             System.out.println(jogadorTurno.nome);
+            System.out.println(jogadorTurno.nome);
 
             return true;
         }
@@ -151,16 +152,20 @@ public class Servidor extends ServidorPOA {
     public boolean verificarPalpitar(String nome) {
         System.out.println("chegou aki");
         Jogador jogador = getJogador(nome);
-        System.out.println(jogadorTurno.nome);
-        return jogador.apostou && jogadorTurno.equals(jogador);
+        //System.out.println(jogadorTurno.nome);
+        return jogadorTurno != null && jogador.apostou && jogadorTurno.equals(jogador) && !jogador.palpitou;
     }
 
     @Override
     public void palpitar(String nome, int quantidadePalitosTotal) {
         Jogador jogador = getJogador(nome);
+        jogador.palpitou = true;
         jogador.palpite = quantidadePalitosTotal;
         System.out.println("Jogador palpitou:" + jogadorTurno.nome + jogador.palpite);
-
+        jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().ifPresent(jogadoraux -> {
+            jogadorTurno = jogadoraux;
+        });
+        System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
     }
 
     @Override

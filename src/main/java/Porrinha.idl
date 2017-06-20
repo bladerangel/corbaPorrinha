@@ -6,6 +6,7 @@ module compilacaoIDL{
 		long quantidadePalitosRestantes;
 		long quantidadePalitosApostados;
 		boolean apostou;
+		boolean palpitou;
 		long palpite;
 	};
 

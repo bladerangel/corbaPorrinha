@@ -2,19 +2,22 @@ import compilacaoIDL.*;
 import org.omg.CORBA.Object;
 import servicos.ComunicacaoServico;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Servidor extends ServidorPOA {
 
-
+    private Comparator<Jogador> comparadorJogador;
     private static final int LIMITE_JOGADORES = 4;
     private Map<Jogador, Eventos> jogadores;
     private Jogador jogadorTurno;
     private ComunicacaoServico comunicacaoServico;
 
     public Servidor() {
-        jogadores = new HashMap<>();
+        comparadorJogador = Comparator.comparingInt(jogador -> jogador.lugar);
+        jogadores = new TreeMap<>(comparadorJogador);
         comunicacaoServico = new ComunicacaoServico();
     }
 
@@ -91,6 +94,7 @@ public class Servidor extends ServidorPOA {
                     e.printStackTrace();
                 }
             });
+            jogadores.keySet().forEach(j -> System.out.println(j.nome + j.lugar));
             return true;
         }
         return false;
@@ -146,32 +150,6 @@ public class Servidor extends ServidorPOA {
         if (jogador.apostou) {
             jogador.palpite = quantidadePalitosTotal;
         }
-       /* int tentativas = 1;
-        int lugarInicial = jogadorTurno.lugar;
-
-        lugarInicial++;
-        while (jogadorTurno.lugar != lugarInicial && tentativas < 4) {
-            System.out.println(lugarInicial);
-            System.out.println(tentativas);
-            if (lugarInicial < LIMITE_JOGADORES) {
-                if (passarTurno(lugarInicial++)) {
-                    tentativas = 4;
-                }
-            } else {
-                lugarInicial = 1;
-                tentativas--;
-            }
-            tentativas++;
-        }
-        */
-    }
-
-    public boolean passarTurno(int lugarTeste) {
-        if (jogadores.keySet().stream().anyMatch(jogador -> jogador.lugar == lugarTeste)) {
-            jogadorTurno = jogadores.keySet().stream().filter(jogador -> jogador.lugar == lugarTeste).findFirst().get();
-            return true;
-        }
-        return false;
     }
 
     @Override

@@ -123,8 +123,11 @@ public class SalaService extends EventosPOA {
     }
 
     public void enviarRequisicaoPalpite() {
-        String palpite = NomeDialogo.nomeDialogo(null, "Informe o seu palpite", "Digite o seu palpite:", false);
-        servidor.palpitar(nomeJogador, Integer.parseInt(palpite));
+        System.out.println("clicou");
+        if (servidor.verificarPalpitar(nomeJogador)) {
+            String palpite = NomeDialogo.nomeDialogo(null, "Informe o seu palpite", "Digite o seu palpite:", false);
+            servidor.palpitar(nomeJogador, Integer.parseInt(palpite));
+        }
     }
 
     @Override

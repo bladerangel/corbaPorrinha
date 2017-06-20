@@ -138,7 +138,7 @@ public class Servidor extends ServidorPOA {
                 }
             }
 
-            // System.out.println(jogadorTurno.nome);
+             System.out.println(jogadorTurno.nome);
 
             return true;
         }
@@ -148,12 +148,19 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
+    public boolean verificarPalpitar(String nome) {
+        System.out.println("chegou aki");
+        Jogador jogador = getJogador(nome);
+        System.out.println(jogadorTurno.nome);
+        return jogador.apostou && jogadorTurno.equals(jogador);
+    }
+
+    @Override
     public void palpitar(String nome, int quantidadePalitosTotal) {
         Jogador jogador = getJogador(nome);
-        if (jogador.apostou && jogadorTurno.equals(jogador)) {
-            jogador.palpite = quantidadePalitosTotal;
-            System.out.println(jogadorTurno.nome + jogador.palpite);
-        }
+        jogador.palpite = quantidadePalitosTotal;
+        System.out.println("Jogador palpitou:" + jogadorTurno.nome + jogador.palpite);
+
     }
 
     @Override

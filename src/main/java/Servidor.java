@@ -180,7 +180,6 @@ public class Servidor extends ServidorPOA {
 
     }
 
-
     public void perdedor(String nome) {
 
     }

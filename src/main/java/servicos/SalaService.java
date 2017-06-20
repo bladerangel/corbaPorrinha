@@ -132,11 +132,6 @@ public class SalaService extends EventosPOA {
     }
 
     @Override
-    public void esolherQuantidadePalitos(int quantidadePalitos) {
-
-    }
-
-    @Override
     public void apostar(int lugar) {
         listaLugares.get(lugar - 1).getMao().getGraphic().getStyleClass().add("mao-fechada");
     }

@@ -20,6 +20,7 @@ public class LugarModelo extends VBox {
     private ImageView imagemAdicionar;
     private ImageView imagemRemover;
     private ImageView imagemPalpite;
+    private Text nomeJogador;
     private Text numeroLugarMesa;
     private Text quantidadePalitosRestantes;
 
@@ -64,6 +65,9 @@ public class LugarModelo extends VBox {
         acoes.setVisible(false);
         acoes.setAlignment(Pos.CENTER);
 
+        nomeJogador = new Text();
+        nomeJogador.setVisible(false);
+
         numeroLugarMesa = new Text();
         numeroLugarMesa.setText("Lugar: " + numeroLugar);
 
@@ -73,10 +77,15 @@ public class LugarModelo extends VBox {
         this.getChildren().add(cadeira);
         this.getChildren().add(mao);
         this.getChildren().add(acoes);
+        this.getChildren().add(nomeJogador);
         this.getChildren().add(numeroLugarMesa);
         this.getChildren().add(quantidadePalitosRestantes);
         this.setAlignment(Pos.CENTER);
         this.setRotate(rotacao);
+    }
+
+    public Text getNomeJogador() {
+        return nomeJogador;
     }
 
     public Button getCadeira() {

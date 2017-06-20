@@ -89,7 +89,7 @@ public class Servidor extends ServidorPOA {
 
             jogadores.values().forEach(evento -> {
                 try {
-                    evento.sentar(lugar);
+                    evento.sentar(nome, lugar);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -105,7 +105,7 @@ public class Servidor extends ServidorPOA {
         jogadores.values().forEach(evento -> {
             jogadores.keySet().forEach(jogador -> {
                 if (jogador.lugar != 0)
-                    evento.sentar(jogador.lugar);
+                    evento.sentar(jogador.nome, jogador.lugar);
             });
         });
     }
@@ -138,7 +138,7 @@ public class Servidor extends ServidorPOA {
                 }
             }
 
-           // System.out.println(jogadorTurno.nome);
+            // System.out.println(jogadorTurno.nome);
 
             return true;
         }

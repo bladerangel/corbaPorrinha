@@ -79,10 +79,12 @@ public class SalaService extends EventosPOA {
     }
 
     @Override
-    public void sentar(int lugar) {
+    public void sentar(String nome, int lugar) {
         LugarModelo lugarModelo = listaLugares.get(lugar - 1);
         lugarModelo.getCadeira().setVisible(false);
         lugarModelo.getMao().setVisible(true);
+        lugarModelo.getNomeJogador().setVisible(true);
+        lugarModelo.getNomeJogador().setText("Jogador: " + nome);
     }
 
 

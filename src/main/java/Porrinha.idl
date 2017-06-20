@@ -12,7 +12,7 @@ module compilacaoIDL{
 	typedef sequence<Jogador> ListaJogadores;
 
     interface Eventos {
-	    void sentar(in long lugar);
+	    void sentar(in string nome, in long lugar);
 	    void enviarMensagem(in string mensagem);
 	    void esolherQuantidadePalitos(in long quantidadePalitos);
 	    void apostar(in long lugar);

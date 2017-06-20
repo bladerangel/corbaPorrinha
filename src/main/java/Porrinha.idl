@@ -34,8 +34,6 @@ module compilacaoIDL{
 		boolean apostar(in string nome);
 		boolean verificarPalpitar(in string nome);
 		void palpitar(in string nome, in long quantidadePalitosTotal);
-        void vencedor(in string nome);
-        void perdedor(in string nome);
 		void adicionarJogador(in string nome);
         void removerJogador(in string nome);
 	};

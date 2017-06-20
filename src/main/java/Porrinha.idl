@@ -15,7 +15,6 @@ module compilacaoIDL{
     interface Eventos {
 	    void sentar(in string nome, in long lugar);
 	    void enviarMensagem(in string mensagem);
-	    void esolherQuantidadePalitos(in long quantidadePalitos);
 	    void apostar(in long lugar);
 	    void palpite(in long lugar, in long palpite);
 	    void entrarSala();

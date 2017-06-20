@@ -176,12 +176,11 @@ public class Servidor extends ServidorPOA {
         System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
     }
 
-    @Override
     public void vencedor(String nome) {
 
     }
 
-    @Override
+
     public void perdedor(String nome) {
 
     }

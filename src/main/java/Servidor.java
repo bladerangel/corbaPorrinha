@@ -165,6 +165,14 @@ public class Servidor extends ServidorPOA {
         jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().ifPresent(jogadoraux -> {
             jogadorTurno = jogadoraux;
         });
+
+        jogadores.values().forEach(evento -> {
+            try {
+                evento.palpite(jogador.lugar, jogador.palpite);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
     }
 

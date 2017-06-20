@@ -23,6 +23,7 @@ public class LugarModelo extends VBox {
     private Text nomeJogador;
     private Text numeroLugarMesa;
     private Text quantidadePalitosRestantes;
+    private Text numeroPalpite;
 
     private HBox acoes;
 
@@ -74,7 +75,11 @@ public class LugarModelo extends VBox {
         quantidadePalitosRestantes = new Text();
         quantidadePalitosRestantes.setVisible(false);
 
+        numeroPalpite = new Text();
+        numeroPalpite.setVisible(false);
+
         this.getChildren().add(cadeira);
+        this.getChildren().add(numeroPalpite);
         this.getChildren().add(mao);
         this.getChildren().add(acoes);
         this.getChildren().add(nomeJogador);
@@ -118,5 +123,9 @@ public class LugarModelo extends VBox {
 
     public int getNumeroLugar() {
         return numeroLugar;
+    }
+
+    public Text getNumeroPalpite() {
+        return numeroPalpite;
     }
 }

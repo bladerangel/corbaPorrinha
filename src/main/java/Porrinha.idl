@@ -17,6 +17,7 @@ module compilacaoIDL{
 	    void enviarMensagem(in string mensagem);
 	    void esolherQuantidadePalitos(in long quantidadePalitos);
 	    void apostar(in long lugar);
+	    void palpite(in long lugar, in long palpite);
 	    void entrarSala();
         void sairSala(in long lugar);
     };

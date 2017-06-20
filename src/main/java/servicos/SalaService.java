@@ -125,6 +125,7 @@ public class SalaService extends EventosPOA {
     public void enviarRequisicaoPalpite() {
         System.out.println("clicou");
         if (servidor.verificarPalpitar(nomeJogador)) {
+            Jogador jogador = servidor.getJogador(nomeJogador);
             String palpite = NomeDialogo.nomeDialogo(null, "Informe o seu palpite", "Digite o seu palpite:", false);
             servidor.palpitar(nomeJogador, Integer.parseInt(palpite));
         }
@@ -138,6 +139,12 @@ public class SalaService extends EventosPOA {
     @Override
     public void apostar(int lugar) {
         listaLugares.get(lugar - 1).getMao().getGraphic().getStyleClass().add("mao-fechada");
+    }
+
+    @Override
+    public void palpite(int lugar, int palpite) {
+        listaLugares.get(lugar - 1).getNumeroPalpite().setVisible(true);
+        listaLugares.get(lugar - 1).getNumeroPalpite().setText("Palpite: " + palpite);
     }
 
     @Override

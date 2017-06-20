@@ -9,14 +9,14 @@ public class NomeDialogo {
 
     private static TextInputDialog dialog;
 
-    public static String nomeDialogo(String titulo, String cabecalho, String conteudo) {
+    public static String nomeDialogo(String titulo, String cabecalho, String conteudo, boolean fechar) {
         dialog = new TextInputDialog();
         dialog.setTitle(titulo);
         dialog.setHeaderText(cabecalho);
         dialog.setContentText(conteudo);
 
         Optional<String> resultado = dialog.showAndWait();
-        if (!resultado.isPresent()) {
+        if (!resultado.isPresent() && fechar) {
             Platform.exit();
             System.exit(0);
         }

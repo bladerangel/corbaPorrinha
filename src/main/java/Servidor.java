@@ -130,13 +130,16 @@ public class Servidor extends ServidorPOA {
                 }
             });
 
-
-           /* if (jogadores.keySet().stream().allMatch(jogador -> jogador.apostou)) {
-                jogadorTurno = jogadores.keySet().stream().findFirst().get();
+            if (jogadores.keySet().stream().allMatch(j -> j.apostou)) {
+                if (jogadorTurno == null) {
+                    jogadorTurno = jogadores.keySet().stream().findFirst().get();
+                } else {
+                    jogadorTurno = jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().get();
+                }
             }
 
-            System.out.println(jogadorTurno.nome);
-            */
+           // System.out.println(jogadorTurno.nome);
+
             return true;
         }
 
@@ -147,8 +150,9 @@ public class Servidor extends ServidorPOA {
     @Override
     public void palpitar(String nome, int quantidadePalitosTotal) {
         Jogador jogador = getJogador(nome);
-        if (jogador.apostou) {
+        if (jogador.apostou && jogadorTurno.equals(jogador)) {
             jogador.palpite = quantidadePalitosTotal;
+            System.out.println(jogadorTurno.nome + jogador.palpite);
         }
     }
 

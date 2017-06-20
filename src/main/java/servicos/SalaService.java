@@ -55,7 +55,7 @@ public class SalaService extends EventosPOA {
 
     public void enviarRequisicaoPerguntarNome() {
         try {
-            String nome = NomeDialogo.nomeDialogo(null, "Informe o nome do jogador", "Digite o nome do jogador:");
+            String nome = NomeDialogo.nomeDialogo(null, "Informe o nome do jogador", "Digite o nome do jogador:", true);
             if (servidor.verificarNomeJogador(nome)) {
                 nomeJogador = nome;
                 comunicacaoServico.criandoNome(this, nome, "text");
@@ -121,7 +121,7 @@ public class SalaService extends EventosPOA {
     }
 
     public void enviarRequisicaoPalpite() {
-        String palpite = NomeDialogo.nomeDialogo(null, "Informe o seu palpite", "Digite o seu palpite:");
+        String palpite = NomeDialogo.nomeDialogo(null, "Informe o seu palpite", "Digite o seu palpite:", false);
         servidor.palpitar(nomeJogador, Integer.parseInt(palpite));
     }
 

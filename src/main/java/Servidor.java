@@ -85,7 +85,7 @@ public class Servidor extends ServidorPOA {
 
             jogador.lugar = lugar;
 
-            jogadores.entrySet().stream().sorted(Comparator.comparingInt(o -> o.getKey().lugar));
+            jogadores.entrySet().stream().sorted(Comparator.comparingInt(j -> -j.getKey().lugar));
             jogadores.keySet().forEach(j -> System.out.println("lugar" + j.lugar));
 
             jogadores.values().forEach(evento -> {

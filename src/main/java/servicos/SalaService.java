@@ -83,6 +83,9 @@ public class SalaService extends EventosPOA {
         LugarModelo lugarModelo = listaLugares.get(lugar - 1);
         lugarModelo.getCadeira().setVisible(false);
         lugarModelo.getMao().setVisible(true);
+        if(servidor.getJogador(nome).apostou){
+            lugarModelo.getMao().getGraphic().getStyleClass().add("mao-fechada");
+        }
         lugarModelo.getNomeJogador().setVisible(true);
         lugarModelo.getNomeJogador().setText("Jogador: " + nome);
     }

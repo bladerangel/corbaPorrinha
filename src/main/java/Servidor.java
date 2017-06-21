@@ -139,7 +139,7 @@ public class Servidor extends ServidorPOA {
                 }
             }
 
-            System.out.println(jogadorTurno.nome);
+            //System.out.println(jogadorTurno.nome);
 
             return true;
         }
@@ -157,23 +157,27 @@ public class Servidor extends ServidorPOA {
     }
 
     @Override
-    public void palpitar(String nome, int quantidadePalitosTotal) {
-        Jogador jogador = getJogador(nome);
-        jogador.palpitou = true;
-        jogador.palpite = quantidadePalitosTotal;
-        System.out.println("Jogador palpitou:" + jogadorTurno.nome + jogador.palpite);
-        jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().ifPresent(jogadoraux -> {
-            jogadorTurno = jogadoraux;
-        });
+    public boolean palpitar(String nome, int palpite) {
+        if (!jogadores.keySet().stream().anyMatch(j -> j.palpite == palpite)) {
+            Jogador jogador = getJogador(nome);
+            jogador.palpitou = true;
+            jogador.palpite = palpite;
+            System.out.println("Jogador palpitou:" + jogadorTurno.nome + jogador.palpite);
+            jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().ifPresent(jogadoraux -> {
+                jogadorTurno = jogadoraux;
+            });
 
-        jogadores.values().forEach(evento -> {
-            try {
-                evento.palpite(jogador.lugar, jogador.palpite);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
+            jogadores.values().forEach(evento -> {
+                try {
+                    evento.palpite(jogador.lugar, jogador.palpite);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
+            return true;
+        }
+        return false;
     }
 
     public void vencedor(String nome) {

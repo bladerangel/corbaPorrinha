@@ -19,6 +19,9 @@ public class NomeDialogo {
         if (!resultado.isPresent() && fechar) {
             Platform.exit();
             System.exit(0);
+            return null;
+        } else if (!resultado.isPresent()) {
+            return null;
         }
         return resultado.get();
     }

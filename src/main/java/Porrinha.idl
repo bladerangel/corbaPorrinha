@@ -32,7 +32,7 @@ module compilacaoIDL{
 		void removerPalito(in string nome);
 		boolean apostar(in string nome);
 		boolean verificarPalpitar(in string nome);
-		void palpitar(in string nome, in long quantidadePalitosTotal);
+		boolean palpitar(in string nome, in long palpite);
 		void adicionarJogador(in string nome);
         void removerJogador(in string nome);
 	};

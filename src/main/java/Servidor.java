@@ -2,39 +2,35 @@ import compilacaoIDL.*;
 import org.omg.CORBA.Object;
 import servicos.ComunicacaoServico;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Servidor extends ServidorPOA {
 
     private static final int LIMITE_JOGADORES = 4;
-    private Map<Jogador, Eventos> jogadores;
+    private List<Jogador> jogadores;
     private Jogador jogadorTurno;
     private ComunicacaoServico comunicacaoServico;
 
     public Servidor() {
 
-        jogadores = new HashMap<>();
+        jogadores = new ArrayList<>();
         comunicacaoServico = new ComunicacaoServico();
     }
 
     @Override
     public Jogador getJogador(String nome) {
-        return jogadores.keySet().stream().filter(jogador -> jogador.nome.equals(nome)).findFirst().get();
+        return jogadores.stream().filter(jogador -> jogador.nome.equals(nome)).findFirst().get();
     }
 
     @Override
     public boolean verificarNomeJogador(String nome) {
-        return !jogadores.keySet().stream().anyMatch(jogador -> jogador.nome.equals(nome)) && !nome.equals("");
+        return !jogadores.stream().anyMatch(jogador -> jogador.nome.equals(nome)) && !nome.equals("");
     }
 
     @Override
     public void adicionarJogador(String nome) {
         try {
-            Object objeto = comunicacaoServico.localizandoNome(nome, "text");
-            Eventos evento = EventosHelper.narrow(objeto);
-            jogadores.put(new Jogador(nome, 0, 3, 0, false, false, 0), evento);
+            jogadores.add(new Jogador(nome, 0, 3, 0, false, false, 0));
             System.out.println("jogador entrou partida" + jogadores.size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,8 +40,10 @@ public class Servidor extends ServidorPOA {
 
     @Override
     public void atualizarChat(String nome, String mensagem) {
-        jogadores.values().forEach(evento -> {
+        jogadores.forEach(jogador -> {
             try {
+                Object objeto = comunicacaoServico.localizandoNome(jogador.nome, "text");
+                Eventos evento = EventosHelper.narrow(objeto);
                 evento.enviarMensagem(mensagem);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -77,7 +75,7 @@ public class Servidor extends ServidorPOA {
         Jogador jogador = getJogador(nome);
         System.out.println("passou aki");
         if (jogador.lugar == 0) {
-            if (jogadores.keySet().stream().anyMatch(j -> j.lugar == lugar)) {
+            if (jogadores.stream().anyMatch(j -> j.lugar == lugar)) {
                 System.out.println("cadeira ocupada");
                 return false;
             }
@@ -85,17 +83,19 @@ public class Servidor extends ServidorPOA {
 
             jogador.lugar = lugar;
 
-            jogadores.entrySet().stream().sorted(Comparator.comparingInt(j -> -j.getKey().lugar));
-            jogadores.keySet().forEach(j -> System.out.println("lugar" + j.lugar));
+            jogadores.sort(Comparator.comparingInt(j -> j.lugar));
+            jogadores.forEach(j -> System.out.println("lugar" + j.lugar));
 
-            jogadores.values().forEach(evento -> {
+            jogadores.forEach(j -> {
                 try {
+                    Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
+                    Eventos evento = EventosHelper.narrow(objeto);
                     evento.sentar(nome, lugar);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-            jogadores.keySet().forEach(j -> System.out.println(j.nome + j.lugar));
+            jogadores.forEach(j -> System.out.println(j.nome + j.lugar));
             return true;
         }
         return false;
@@ -103,17 +103,23 @@ public class Servidor extends ServidorPOA {
 
     @Override
     public void atualizarLugares() {
-        jogadores.values().forEach(evento -> {
-            jogadores.keySet().forEach(jogador -> {
-                if (jogador.lugar != 0)
-                    evento.sentar(jogador.nome, jogador.lugar);
-            });
+        jogadores.forEach(j -> {
+            try {
+                Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
+                Eventos evento = EventosHelper.narrow(objeto);
+                jogadores.forEach(jogador -> {
+                    if (jogador.lugar != 0)
+                        evento.sentar(jogador.nome, jogador.lugar);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
     @Override
     public Jogador[] getJogadores() {
-        return (Jogador[]) jogadores.entrySet().toArray();
+        return (Jogador[]) jogadores.toArray();
     }
 
     @Override
@@ -123,17 +129,19 @@ public class Servidor extends ServidorPOA {
         if (!jogador.apostou && jogador.lugar != 0) {
 
             jogador.apostou = true;
-            jogadores.values().forEach(evento -> {
+            jogadores.forEach(j -> {
                 try {
+                    Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
+                    Eventos evento = EventosHelper.narrow(objeto);
                     evento.apostar(jogador.lugar);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
 
-            if (jogadores.keySet().stream().allMatch(j -> j.apostou)) {
+            if (jogadores.stream().allMatch(j -> j.apostou)) {
                 if (jogadorTurno == null) {
-                    jogadorTurno = jogadores.keySet().stream().findFirst().get();
+                    jogadorTurno = jogadores.stream().findFirst().get();
                     //} else {
                     //  jogadorTurno = jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().get();
                 }
@@ -158,29 +166,60 @@ public class Servidor extends ServidorPOA {
 
     @Override
     public boolean palpitar(String nome, int palpite) {
-        if (!jogadores.keySet().stream().anyMatch(j -> j.palpite == palpite)) {
+        if (!jogadores.stream().anyMatch(j -> j.palpite == palpite)) {
             Jogador jogador = getJogador(nome);
             jogador.palpitou = true;
             jogador.palpite = palpite;
             System.out.println("Jogador palpitou:" + jogadorTurno.nome + jogador.palpite);
-            jogadores.keySet().stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().ifPresent(jogadoraux -> {
+            jogadores.stream().filter(j -> j.lugar > jogadorTurno.lugar).findFirst().ifPresent(jogadoraux -> {
                 jogadorTurno = jogadoraux;
             });
 
-            jogadores.values().forEach(evento -> {
+            jogadores.forEach(j -> {
                 try {
+                    Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
+                    Eventos evento = EventosHelper.narrow(objeto);
                     evento.palpite(jogador.lugar, jogador.palpite);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
+
+            if (jogadores.stream().allMatch(j -> j.palpitou)) {
+                vencedorRodada();
+            }
             System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
             return true;
         }
         return false;
     }
 
-    public void vencedor(String nome) {
+    public void vencedorRodada() {
+        int somatorio = jogadores.stream().mapToInt(j -> j.palpite).sum();
+        System.out.println("somatorio"+somatorio);
+        jogadores.stream().filter(j -> j.palpite == somatorio).findFirst().ifPresent(jogador -> {
+            jogador.quantidadePalitosRestantes += jogador.quantidadePalitosApostados - 1;
+            jogador.quantidadePalitosApostados = 0;
+
+            jogadores.stream().filter(j -> !j.nome.equals(jogador.nome)).forEach(j -> {
+                j.palpite = 0;
+                j.apostou = false;
+                j.palpitou = false;
+                j.quantidadePalitosApostados = 0;
+                j.quantidadePalitosRestantes += j.quantidadePalitosApostados;
+            });
+
+            jogadores.forEach(j -> {
+                try {
+                    Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
+                    Eventos evento = EventosHelper.narrow(objeto);
+                    evento.vencedorRodada(jogador.nome);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+
 
     }
 
@@ -191,10 +230,12 @@ public class Servidor extends ServidorPOA {
     @Override
     public void removerJogador(String nome) {
         Jogador jogador = getJogador(nome);
-        jogadores.keySet().remove(jogador);
+        jogadores.remove(jogador);
         if (jogador.lugar != 0) {
-            jogadores.values().forEach(evento -> {
+            jogadores.forEach(j -> {
                 try {
+                    Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
+                    Eventos evento = EventosHelper.narrow(objeto);
                     evento.sairSala(jogador.lugar);
                 } catch (Exception e) {
                     e.printStackTrace();

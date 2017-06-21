@@ -18,6 +18,7 @@ module compilacaoIDL{
 	    void apostar(in long lugar);
 	    void palpite(in long lugar, in long palpite);
 	    void entrarSala();
+	    void vencedorRodada(in string nome);
         void sairSala(in long lugar);
     };
 

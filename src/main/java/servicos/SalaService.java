@@ -83,7 +83,7 @@ public class SalaService extends EventosPOA {
         LugarModelo lugarModelo = listaLugares.get(lugar - 1);
         lugarModelo.getCadeira().setVisible(false);
         lugarModelo.getMao().setVisible(true);
-        if(servidor.getJogador(nome).apostou){
+        if (servidor.getJogador(nome).apostou) {
             lugarModelo.getMao().getGraphic().getStyleClass().add("mao-fechada");
         }
         lugarModelo.getNomeJogador().setVisible(true);
@@ -115,7 +115,7 @@ public class SalaService extends EventosPOA {
         servidor.removerPalito(nomeJogador);
         Jogador jogador = servidor.getJogador(nomeJogador);
         listaLugares.get(jogador.lugar - 1).getMao().setText(jogador.quantidadePalitosApostados + " Palitos");
-        listaLugares.get(jogador.lugar - 1).getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes + "");
+        listaLugares.get(jogador.lugar - 1).getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes);
     }
 
     public void enviarRequisicaoApostar() {
@@ -144,6 +144,17 @@ public class SalaService extends EventosPOA {
     public void palpite(int lugar, int palpite) {
         listaLugares.get(lugar - 1).getNumeroPalpite().setVisible(true);
         listaLugares.get(lugar - 1).getNumeroPalpite().setText("Palpite: " + palpite);
+    }
+
+    @Override
+    public void vencedorRodada(String nome) {
+        chat.appendText("O jogador vencedor da rodada: " + nome);
+        Jogador jogador = servidor.getJogador(nome);
+        LugarModelo lugarModelo = listaLugares.get(jogador.lugar - 1);
+        lugarModelo.getNumeroPalpite().setVisible(false);
+        lugarModelo.getMao().getGraphic().getStyleClass().add("mao-aberta");
+        lugarModelo.getMao().setText(jogador.quantidadePalitosApostados + " Palitos");
+        lugarModelo.getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes);
     }
 
     @Override

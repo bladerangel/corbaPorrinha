@@ -125,7 +125,6 @@ public class SalaService extends EventosPOA {
     public void enviarRequisicaoPalpite() {
         System.out.println("clicou");
         if (servidor.verificarPalpitar(nomeJogador)) {
-            Jogador jogador = servidor.getJogador(nomeJogador);
             String palpite = NomeDialogo.nomeDialogo(null, "Informe o seu palpite", "Digite o seu palpite:", false);
             if (palpite != null && !servidor.palpitar(nomeJogador, Integer.parseInt(palpite))) {
                 JanelaAlerta.janelaAlerta(null, "Este palpite já foi dado!", null);

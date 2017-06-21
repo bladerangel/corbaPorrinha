@@ -19,6 +19,7 @@ module compilacaoIDL{
 	    void palpite(in long lugar, in long palpite);
 	    void entrarSala();
 	    void vencedorRodada(in string nome);
+	    void empateRodada();
         void sairSala(in long lugar);
     };
 

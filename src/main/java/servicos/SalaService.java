@@ -149,11 +149,7 @@ public class SalaService extends EventosPOA {
 
     @Override
     public void vencedorRodada(String nome) {
-        if (nome != null) {
-            chat.appendText("O jogador vencedor da rodada: " + nome);
-        } else {
-            chat.appendText("Ninguem venceu essa rodada: ");
-        }
+        chat.appendText("O jogador vencedor da rodada: " + nome);
         Jogador jogador = servidor.getJogador(nomeJogador);
         listaLugares.forEach(lugarModelo -> {
             lugarModelo.getNumeroPalpite().setVisible(false);
@@ -163,6 +159,19 @@ public class SalaService extends EventosPOA {
             lugarModelo.getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes);
         });
 
+    }
+
+    @Override
+    public void empateRodada() {
+        chat.appendText("Ninguem venceu essa rodada: ");
+        Jogador jogador = servidor.getJogador(nomeJogador);
+        listaLugares.forEach(lugarModelo -> {
+            lugarModelo.getNumeroPalpite().setVisible(false);
+            lugarModelo.getMao().getGraphic().getStyleClass().remove("mao-fechada");
+            lugarModelo.getMao().getGraphic().getStyleClass().add("mao-aberta");
+            lugarModelo.getMao().setText("");
+            lugarModelo.getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes);
+        });
     }
 
     @Override

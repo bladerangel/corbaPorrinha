@@ -1,4 +1,5 @@
 import compilacaoIDL.*;
+import jdk.nashorn.internal.scripts.JO;
 import org.omg.CORBA.Object;
 import servicos.ComunicacaoServico;
 
@@ -188,44 +189,45 @@ public class Servidor extends ServidorPOA {
             if (jogadores.stream().allMatch(j -> j.palpitou)) {
                 vencedorRodada();
             }
-            System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
+            //System.out.println("proximo jogador a palpitar:" + jogadorTurno.nome + jogador.palpite);
             return true;
         }
         return false;
     }
 
     public void vencedorRodada() {
-        int somatorio = jogadores.stream().mapToInt(j -> j.palpite).sum();
-        System.out.println("somatorio"+somatorio);
-        jogadores.stream().filter(j -> j.palpite == somatorio).findFirst().ifPresent(jogador -> {
-            jogador.quantidadePalitosRestantes += jogador.quantidadePalitosApostados - 1;
-            jogador.quantidadePalitosApostados = 0;
+        int somatorio = jogadores.stream().mapToInt(j -> j.quantidadePalitosApostados).sum();
+        System.out.println("somatorio" + somatorio);
+        Jogador jogadorVencedor = jogadores.stream().filter(j -> j.palpite == somatorio).findFirst().orElseGet(null);
+        System.out.println("jogador" + jogadorVencedor.nome);
 
-            jogadores.stream().filter(j -> !j.nome.equals(jogador.nome)).forEach(j -> {
-                j.palpite = 0;
-                j.apostou = false;
-                j.palpitou = false;
-                j.quantidadePalitosApostados = 0;
+        jogadores.forEach(j -> {
+            j.palpite = 0;
+            j.apostou = false;
+            j.palpitou = false;
+            if (!j.nome.equals(jogadorVencedor.nome))
                 j.quantidadePalitosRestantes += j.quantidadePalitosApostados;
-            });
+            else
+                j.quantidadePalitosRestantes += j.quantidadePalitosApostados - 1;
+            j.quantidadePalitosApostados = 0;
 
-            jogadores.forEach(j -> {
-                try {
-                    Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
-                    Eventos evento = EventosHelper.narrow(objeto);
-                    evento.vencedorRodada(jogador.nome);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
         });
 
+        jogadores.forEach(j -> {
+            try {
+                Object objeto = comunicacaoServico.localizandoNome(j.nome, "text");
+                Eventos evento = EventosHelper.narrow(objeto);
+                evento.vencedorRodada(jogadorVencedor.nome);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        jogadorTurno = null;
+
 
     }
 
-    public void perdedor(String nome) {
-
-    }
 
     @Override
     public void removerJogador(String nome) {

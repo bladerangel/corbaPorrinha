@@ -42,11 +42,11 @@ public class SalaService extends ClientePOA {
     //faz o carregamento dos eventos dos lugares
     private void carregarEventosLugares() {
         listaLugares.forEach(lugar -> {
-            lugar.getCadeira().setOnMouseClicked(event -> enviarRequisicaoSentar(lugar));
-            lugar.getMao().setOnMouseClicked(event -> enviarRequisicaoApostar());
-            lugar.getAdicionar().setOnMouseClicked(event -> enviarRequisicaoAdicionar());
-            lugar.getRemover().setOnMouseClicked(event -> enviarRequisicaoRemover());
-            lugar.getPalpite().setOnMouseClicked(event -> enviarRequisicaoPalpite());
+            lugar.getCadeira().setOnMouseClicked(evento -> enviarRequisicaoSentar(lugar));
+            lugar.getMao().setOnMouseClicked(evento -> enviarRequisicaoApostar(lugar.getNumeroLugar()));
+            lugar.getAdicionar().setOnMouseClicked(evento -> enviarRequisicaoAdicionar());
+            lugar.getRemover().setOnMouseClicked(evento -> enviarRequisicaoRemover());
+            lugar.getPalpite().setOnMouseClicked(evento -> enviarRequisicaoPalpite());
         });
     }
 
@@ -123,8 +123,9 @@ public class SalaService extends ClientePOA {
     }
 
     //jogador faz uma aposta
-    private void enviarRequisicaoApostar() {
-        servidor.apostar(nomeJogador);
+    private void enviarRequisicaoApostar(int lugar) {
+        if (servidor.getJogador(nomeJogador).lugar == lugar)
+            servidor.apostar(nomeJogador);
     }
 
     //jogador recebe a requisicao da aposta feita

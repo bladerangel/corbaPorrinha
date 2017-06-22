@@ -17,8 +17,9 @@ module compilacaoIDL{
 	    void escreverMensagem(in string mensagem);
 	    void apostar(in long lugar);
 	    void palpite(in long lugar, in long palpite);
-	    void vencedorRodada(in string nome);
+	    void vencedorRodada();
 	    void empateRodada();
+	    void vencedorJogo();
 	    void sairSala(in long lugar);
     };
 

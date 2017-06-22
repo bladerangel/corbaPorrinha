@@ -155,13 +155,18 @@ public class SalaService extends ClientePOA {
 
     //jogador recebe a requisicao o vencedor da rodada
     @Override
-    public void vencedorRodada(String nome) {
+    public void vencedorRodada() {
         reiniciarRodada();
     }
 
     //jogador recebe a requisicao do empate da rodada
     @Override
     public void empateRodada() {
+        reiniciarRodada();
+    }
+
+    @Override
+    public void vencedorJogo() {
         reiniciarRodada();
     }
 

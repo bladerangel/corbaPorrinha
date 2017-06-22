@@ -47,10 +47,13 @@ public class Servidor extends ServidorPOA {
                         cliente.palpite(jogador.lugar, jogador.palpite);
                         break;
                     case "vencedorRodada":
-                        cliente.vencedorRodada(jogador.nome);
+                        cliente.vencedorRodada();
                         break;
                     case "empateRodada":
                         cliente.empateRodada();
+                        break;
+                    case "vencedorJogo":
+                        cliente.vencedorJogo();
                         break;
                     default:
                         break;
@@ -196,12 +199,12 @@ public class Servidor extends ServidorPOA {
 
         //caso algum jogador tenha acertado o palpite
         if (jogador.isPresent()) {
-            reiniciarPartida(jogador.get(), true);
-            enviarRequisicao("vencedorRodada", jogador.get(), null);
-            enviarRequisicao("enviarMensagem", null, "O jogador " + jogador.get().nome + " foi o vencedor da rodada");
+            reiniciarRodada(jogador.get(), true);
+            enviarRequisicao("vencedorRodada", null, null);
+            enviarRequisicao("enviarMensagem", null, "O jogador " + jogador.get().nome + " foi o vencedor da rodada!");
             //caso de empate
         } else {
-            reiniciarPartida(null, false);
+            reiniciarRodada(null, false);
             enviarRequisicao("empateRodada", null, null);
             enviarRequisicao("enviarMensagem", null, "A partida deu empate!");
         }
@@ -209,7 +212,7 @@ public class Servidor extends ServidorPOA {
     }
 
     //metodo auxilar para reiniciar a partida
-    private void reiniciarPartida(Jogador jogador, boolean vencedor) {
+    private void reiniciarRodada(Jogador jogador, boolean vencedor) {
         jogadores.forEach(j -> {
             j.palpite = 0;
             j.apostou = false;
@@ -219,6 +222,12 @@ public class Servidor extends ServidorPOA {
             else
                 j.quantidadePalitosRestantes += j.quantidadePalitosApostados;
             j.quantidadePalitosApostados = 0;
+
+            if (j.quantidadePalitosRestantes == 0) {
+                j.quantidadePalitosRestantes = 3;
+                enviarRequisicao("vencedorJogo", j, null);
+                enviarRequisicao("enviarMensagem", null, "O jogador " + j.nome + " foi o vencedor do jogo!");
+            }
         });
     }
 

@@ -46,14 +46,11 @@ public class Servidor extends ServidorPOA {
                     case "palpite":
                         cliente.palpite(jogador.lugar, jogador.palpite);
                         break;
-                    case "vencedorRodada":
-                        cliente.vencedorRodada();
-                        break;
-                    case "empateRodada":
-                        cliente.empateRodada();
-                        break;
-                    case "vencedorJogo":
-                        cliente.vencedorJogo();
+                    case "reiniciarRodada":
+                        jogadores.forEach(jaux -> {
+                            if (jaux.lugar != 0)
+                                cliente.reiniciarRodada(jaux.lugar, jaux.quantidadePalitosRestantes);
+                        });
                         break;
                     default:
                         break;
@@ -201,12 +198,12 @@ public class Servidor extends ServidorPOA {
         //caso algum jogador tenha acertado o palpite
         if (jogador.isPresent()) {
             reiniciarRodada(jogador.get(), true);
-            enviarRequisicao("vencedorRodada", null, null);
+            enviarRequisicao("reiniciarRodada", null, null);
             enviarRequisicao("enviarMensagem", null, "O jogador " + jogador.get().nome + " foi o vencedor da rodada!");
             //caso de empate
         } else {
             reiniciarRodada(null, false);
-            enviarRequisicao("empateRodada", null, null);
+            enviarRequisicao("reiniciarRodada", null, null);
             enviarRequisicao("enviarMensagem", null, "A partida deu empate!");
         }
         jogadorTurno = null;
@@ -226,7 +223,6 @@ public class Servidor extends ServidorPOA {
 
             if (j.quantidadePalitosRestantes == 0) {
                 j.quantidadePalitosRestantes = QUANTIDADE_PALITOS;
-                enviarRequisicao("vencedorJogo", j, null);
                 enviarRequisicao("enviarMensagem", null, "O jogador " + j.nome + " foi o vencedor do jogo!");
             }
         });

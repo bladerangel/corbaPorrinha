@@ -1,6 +1,7 @@
 package servicos;
 
 import compilacaoIDL.*;
+import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 import models.LugarModelo;
 import org.omg.CORBA.Object;
@@ -154,33 +155,15 @@ public class SalaService extends ClientePOA {
         lugarModelo.getNumeroPalpite().setText("Palpite: " + palpite);
     }
 
-    //jogador recebe a requisicao o vencedor da rodada
+    //jogador recebe a requisicao para reiniciar a rodada
     @Override
-    public void vencedorRodada() {
-        reiniciarRodada();
-    }
-
-    //jogador recebe a requisicao do empate da rodada
-    @Override
-    public void empateRodada() {
-        reiniciarRodada();
-    }
-
-    @Override
-    public void vencedorJogo() {
-        reiniciarRodada();
-    }
-
-    //metodo auxiliar para reiniciar a rodada
-    private void reiniciarRodada() {
-        Jogador jogador = servidor.getJogador(nomeJogador);
-        listaLugares.forEach(lugarModelo -> {
-            lugarModelo.getNumeroPalpite().setVisible(false);
-            lugarModelo.getMao().getGraphic().getStyleClass().remove("mao-fechada");
-            lugarModelo.getMao().getGraphic().getStyleClass().add("mao-aberta");
-            lugarModelo.getMao().setText("");
-            lugarModelo.getQuantidadePalitosRestantes().setText("Palitos Restante: " + jogador.quantidadePalitosRestantes);
-        });
+    public void reiniciarRodada(int lugar, int quantidadePalitosRestantes) {
+        LugarModelo lugarModelo = listaLugares.get(lugar - 1);
+        lugarModelo.getNumeroPalpite().setVisible(false);
+        Platform.runLater(() -> lugarModelo.getMao().setText(""));
+        lugarModelo.getMao().getGraphic().getStyleClass().remove("mao-fechada");
+        lugarModelo.getMao().getGraphic().getStyleClass().add("mao-aberta");
+        lugarModelo.getQuantidadePalitosRestantes().setText("Palitos Restante: " + quantidadePalitosRestantes);
     }
 
     //jogador saiu da sala

@@ -224,7 +224,7 @@ public class Servidor extends ServidorPOA {
             j.quantidadePalitosApostados = 0;
 
             if (j.quantidadePalitosRestantes == 0) {
-                j.quantidadePalitosRestantes = 3;
+                j.quantidadePalitosRestantes = QUANTIDADE_PALITOS;
                 enviarRequisicao("vencedorJogo", j, null);
                 enviarRequisicao("enviarMensagem", null, "O jogador " + j.nome + " foi o vencedor do jogo!");
             }

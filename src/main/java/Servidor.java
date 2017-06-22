@@ -212,7 +212,7 @@ public class Servidor extends ServidorPOA {
     //metodo auxilar para reiniciar a partida
     private void reiniciarRodada(Jogador jogador, boolean vencedor) {
         jogadores.forEach(j -> {
-            j.palpite = 0;
+            j.palpite = -1;
             j.apostou = false;
             j.palpitou = false;
             if (vencedor && j.nome.equals(jogador.nome))

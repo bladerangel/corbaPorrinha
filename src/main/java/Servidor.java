@@ -88,6 +88,7 @@ public class Servidor extends ServidorPOA {
         jogadores.remove(jogador);
         if (jogador.lugar != 0) {
             enviarRequisicao("sair", jogador, null);
+            enviarRequisicao("enviarMensagem", null, "O jogaodor " + nome + " saiu do jogo!");
         }
     }
 

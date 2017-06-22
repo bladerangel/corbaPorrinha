@@ -48,6 +48,7 @@ public class MainControlador implements Initializable {
 
     }
 
+    //o jogador envia uma mensagem
     @FXML
     void enviarMensagem() {
         salaService.enviarRequisicaoAtualizarChat(texto.getText());

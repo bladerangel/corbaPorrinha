@@ -1,42 +1,41 @@
 module compilacaoIDL{
 
 	struct Jogador {
+
 		string nome;
 		long lugar;
 		long quantidadePalitosRestantes;
 		long quantidadePalitosApostados;
+		long palpite;
 		boolean apostou;
 		boolean palpitou;
-		long palpite;
 	};
 
-	typedef sequence<Jogador> ListaJogadores;
+    interface Cliente {
 
-    interface Eventos {
 	    void sentar(in string nome, in long lugar);
-	    void enviarMensagem(in string mensagem);
+	    void escreverMensagem(in string mensagem);
 	    void apostar(in long lugar);
 	    void palpite(in long lugar, in long palpite);
-	    void entrarSala();
 	    void vencedorRodada(in string nome);
 	    void empateRodada();
-        void sairSala(in long lugar);
+	    void sairSala(in long lugar);
     };
 
 	interface Servidor {
-	    ListaJogadores getJogadores();
+
 	    Jogador getJogador(in string nome);
+	    void adicionarJogador(in string nome);
+        void removerJogador(in string nome);
 	    boolean verificarNomeJogador(in string nome);
 	    boolean verificarLugar(in string nome, in long lugar);
 	    void atualizarLugares();
-		void atualizarChat(in string nome, in string mensagem);
+		void enviarMensagem(in string nome, in string mensagem);
 		void adicionarPalito(in string nome);
 		void removerPalito(in string nome);
-		boolean apostar(in string nome);
+		void apostar(in string nome);
 		boolean verificarPalpitar(in string nome);
 		boolean palpitar(in string nome, in long palpite);
-		void adicionarJogador(in string nome);
-        void removerJogador(in string nome);
 	};
 
 

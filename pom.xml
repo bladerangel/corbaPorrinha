@@ -49,7 +49,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>make-assembly</id>
+                        <id>servidor</id>
                         <goals>
                             <goal>single</goal>
                         </goals>

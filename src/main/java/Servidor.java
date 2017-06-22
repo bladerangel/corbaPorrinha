@@ -72,7 +72,7 @@ public class Servidor extends ServidorPOA {
     @Override
     public void adicionarJogador(String nome) {
         try {
-            jogadores.add(new Jogador(nome, 0, QUANTIDADE_PALITOS, 0, 0, false, false));
+            jogadores.add(new Jogador(nome, 0, QUANTIDADE_PALITOS, 0, -1, false, false));
         } catch (Exception e) {
             e.printStackTrace();
         }

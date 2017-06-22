@@ -235,6 +235,7 @@ public class Servidor extends ServidorPOA {
 
     public static void main(String[] args) {
         try {
+            Runtime.getRuntime().exec("tnameserv");
             Servidor servidor = new Servidor();
             servidor.getComunicacaoServico().obtendoRootPOA();
             servidor.getComunicacaoServico().ativandoPOA();
